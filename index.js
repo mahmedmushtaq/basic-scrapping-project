@@ -28,10 +28,20 @@ const scrapeJobsHeader = async () => {
 };
 
 const scrapeDescription = async (jobsWithHeader) => {
-  await Promise.all(
+  return await Promise.all(
     jobsWithHeader.map(async (job) => {
       const htmlResult = await request.get(job.url);
       const $ = cheerio.load(htmlResult);
+      $('.print-qrcode-container').remove();
+      job.description = $('#postingbody').text();
+      const officeLocationText = $('#postingbody').find('strong')[0];
+
+      if (officeLocationText) {
+        const sibling = officeLocationText.nextSibling;
+        job.address = sibling;
+      }
+
+      return job;
     })
   );
 };
@@ -39,4 +49,5 @@ const scrapeDescription = async (jobsWithHeader) => {
 (async () => {
   const jobsWithHeader = await scrapeJobsHeader();
   const jobsFullData = await scrapeDescription(jobsWithHeader);
+  console.log(jobsFullData[0].address.data);
 })();
