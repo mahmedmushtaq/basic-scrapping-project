@@ -2,6 +2,8 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 const ObjectsToCsv = require('objects-to-csv');
 
+// Pass!@#12pass
+
 const url = 'https://sfbay.craigslist.org/d/software-qa-dba-etc/search/sof';
 
 const scrapResults = [];
